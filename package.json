@@ -1,0 +1,22 @@
+{
+  "name": "talkitive",
+  "version": "1.0.0",
+  "description": "A real time chat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Muneeb ur rehman",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "ibm-watson": "^5.2.1",
+    "jquery": "^3.4.1",
+    "mongoose": "^5.8.5",
+    "socket.io": "^2.3.0",
+    "tunnel": "0.0.6"
+  }
+}

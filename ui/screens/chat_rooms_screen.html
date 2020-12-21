@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Chatrooms</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="../assets/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script src="../js/values.js"></script>
+    
+    </style>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+
+    <br>
+    <div class="container-fluid bg-warning">
+      <h1 class="justify-content-center font-weight-lighter font-italic d-flex">
+        Select a chat room
+      </h1>
+      <div class="container-fluid d-flex justify-content-center">
+        <div
+          class="jumbotron bg-white w-75 shadow-lg"
+          style="box-shadow: 0 1rem 3rem #ff6666 !important;max-height: 1400px; "
+          id="we"
+          
+        >
+
+        <div class="overflow-auto" style="overflow:scroll;height: 300px;" id="chat_room_store">
+
+
+
+
+              
+        </div>
+        
+         
+
+
+          
+          
+        </div>
+
+        <div
+      class="jumbotron bg-white w-25 shadow-lg"
+      style="box-shadow: 0 .125rem .25rem #ff6666 !important;max-height: 1300px; margin-left: 20px;"
+     
+      
+    >
+
+    <form>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Title</label>
+          <input type="email" class="form-control" id="title" aria-describedby="emailHelp" placeholder="eg: Pizza lovers">
+          
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail2">discription</label>
+            <input type="email" class="form-control" id="discription" placeholder="eg: We can die for Pizza">
+            
+          </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Key</label>
+          <input type="password" class="form-control" id="password">
+        </div>
+        
+      </form>
+    <button id="create_chatRoom" type="button" class="btn btn-lg btn-block shadow-md" style="width: 90%;margin-left: 13px; margin-top: 5px; background-color: #66cccc;">Create Chatroom</button>
+  
+    </div>
+      </div>
+
+      <br>
+    </div>
+
+
+
+  </body>
+</html>
+
+
+<script>
+
+
+var socket=io();
+$(()=>{
+
+
+    getChatRooms();
+    $("#create_chatRoom").click(createChatRoom);
+});
+
+function getChatRooms(){
+    $.get("http://localhost:3301/getAllChatRooms",(data)=>{
+        data.forEach(element => {
+            addChatRoom(element);
+        });
+    })
+
+}
+
+
+function createChatRoom(){
+var title=$("#title").val();
+
+var discription=$("#discription").val();
+
+var password=$("#password").val();
+
+$.post("/addChatRoom",{title:title,discription:discription,password:password});
+
+}
+
+
+function joinChatRoom(event){
+    console.log("iam called");
+
+    var target = $( event.target );
+
+    var password=target.siblings('input').val();
+    var title=target.siblings('h5').text();
+  
+    $.get(`/verifyChatRoom?title=${title}&password=${password}`,(data)=>{
+
+      console.log(data);
+        if(data.status=="true"){
+            window.location.href="http://localhost:3301/chat";
+        }else{
+
+          alert("again");
+        }
+    })
+
+}
+socket.on("chatRoomAdded",addChatRoom);
+
+function addChatRoom(chatRoom){
+$("#chat_room_store").append(chatRoomValue(chatRoom));
+}
+
+
+</script>

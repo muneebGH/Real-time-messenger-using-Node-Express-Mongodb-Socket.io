@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Chatting</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="../assets/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+      type="text/css"
+      rel="stylesheet"
+    />
+
+    <script src="../js/values.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+
+    <input type="hidden" id="chatRoomTitleHidden" value="wer" />
+    <div class="container-fluid bg-warning">
+      <div class="container-fluid">
+        <div class="cotainer justify-content-center d-flex">
+          <img
+            src="../assets/logo.png"
+            alt=""
+            class="rounded float-left"
+            height="150px"
+            data-toggle="modal"
+            data-target=".bd-example-modal-lg"
+          />
+
+          <div
+            class="modal fade bd-example-modal-lg"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myLargeModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-sm" role="document">
+              <div class="modal-content">
+                <a
+                  href="http://localhost:3301/selectChatRoom"
+                  type="button"
+                  class="btn btn-outline-dark"
+                  >chatrooms</a
+                >
+
+                <a
+                  href="http://localhost:3301/logout"
+                  type="button"
+                  class="btn btn-outline-dark"
+                  >logout</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="messaging">
+          <div
+            class="mesgs bg-white shadow-lg"
+            style="box-shadow: 0 1rem 3rem #cc0066 !important"
+          >
+            <div id="all_messages" class="msg_history">
+              <div class="card shadow-sm" style="margin-top: 3px;">
+                <div class="card-body">
+                  <h5
+                    class="card-title justify-content-center d-flex font-weight-light"
+                    style="color: #cc0066;"
+                  >
+                    wer
+                  </h5>
+                  <p class="card-text justify-content-center d-flex">
+                    sdf
+                  </p>
+                </div>
+              </div>
+              <br />
+            </div>
+            <div class="type_msg">
+              <div class="input_msg_write">
+                <input
+                  id="type_message"
+                  type="text"
+                  class="write_msg"
+                  placeholder="Type a message"
+                />
+                <button id="send_message" class="msg_send_btn" type="button">
+                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    background-color: #ffc106;
+  }
+
+  .container {
+    max-width: 1300px;
+    margin: auto;
+    box-shadow: 0 50px 50px #ff6666;
+  }
+  img {
+    max-width: 100%;
+  }
+  .inbox_people {
+    background: #f8f8f8 none repeat scroll 0 0;
+    float: left;
+    overflow: hidden;
+    width: 40%;
+    border-right: 1px solid #c4c4c4;
+  }
+  .inbox_msg {
+    border: 1px solid #c4c4c4;
+    clear: both;
+    overflow: hidden;
+  }
+  .top_spac {
+    margin: 20px 0 0;
+  }
+
+  .recent_heading {
+    float: left;
+    width: 40%;
+  }
+  .srch_bar {
+    display: inline-block;
+    text-align: right;
+    width: 60%;
+    padding: ;
+  }
+  .headind_srch {
+    padding: 10px 29px 10px 20px;
+    overflow: hidden;
+    border-bottom: 1px solid #c4c4c4;
+  }
+
+  .recent_heading h4 {
+    color: #05728f;
+    font-size: 21px;
+    margin: auto;
+  }
+  .srch_bar input {
+    border: 1px solid #cdcdcd;
+    border-width: 0 0 1px 0;
+    width: 80%;
+    padding: 2px 0 4px 6px;
+    background: none;
+  }
+  .srch_bar .input-group-addon button {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    padding: 0;
+    color: #707070;
+    font-size: 18px;
+  }
+  .srch_bar .input-group-addon {
+    margin: 0 0 0 -27px;
+  }
+
+  .chat_ib h5 {
+    font-size: 15px;
+    color: #464646;
+    margin: 0 0 8px 0;
+  }
+  .chat_ib h5 span {
+    font-size: 13px;
+    float: right;
+  }
+  .chat_ib p {
+    font-size: 14px;
+    color: #989898;
+    margin: auto;
+  }
+  .chat_img {
+    float: left;
+    width: 11%;
+  }
+  .chat_ib {
+    float: left;
+    padding: 0 0 0 15px;
+    width: 88%;
+  }
+
+  .chat_people {
+    overflow: hidden;
+    clear: both;
+  }
+  .chat_list {
+    border-bottom: 1px solid #c4c4c4;
+    margin: 0;
+    padding: 18px 16px 10px;
+  }
+  .inbox_chat {
+    height: 550px;
+    overflow-y: scroll;
+  }
+
+  .active_chat {
+    background: #ebebeb;
+  }
+
+  .incoming_msg_img {
+    display: inline-block;
+    width: 6%;
+  }
+  .received_msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    width: 92%;
+  }
+  .received_withd_msg p {
+    background: #ff6666 none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+  }
+  .time_date {
+    color: #747474;
+    display: block;
+    font-size: 12px;
+    margin: 8px 0 0;
+  }
+  .received_withd_msg {
+    width: 57%;
+  }
+  .mesgs {
+    float: left;
+    padding: 10px 25px 0 5px;
+    margin-left: 10%;
+    width: 80%;
+  }
+
+  .sent_msg p {
+    background: #66cccc none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0;
+    color: #fff;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+  }
+  .outgoing_msg {
+    overflow: hidden;
+    margin: 26px 0 26px;
+  }
+  .sent_msg {
+    float: right;
+    width: 46%;
+  }
+  .input_msg_write input {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #4c4c4c;
+    font-size: 15px;
+    min-height: 48px;
+    width: 100%;
+  }
+
+  .type_msg {
+    border-top: 1px solid #c4c4c4;
+    position: relative;
+  }
+  .msg_send_btn {
+    background: #05728f none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    height: 33px;
+    position: absolute;
+    right: 0;
+    top: 11px;
+    width: 33px;
+  }
+  .messaging {
+    padding: 0 0 50px 0;
+  }
+  .msg_history {
+    height: 516px;
+    padding: 50px;
+    overflow-y: auto;
+  }
+</style>
+
+<script>
+  var socket = io();
+
+  var userName = "";
+
+  $(() => {
+    setHiddenField();
+    $("#send_message").click(sendMessage);
+    getMessages();
+  });
+
+  function setHiddenField() {
+    $.get("http://localhost:3301/myChatRoomTitle", data => {
+      console.log(data);
+      $("#chatRoomTitleHidden").val(data);
+    });
+  }
+  function sendMessage() {
+    var text = $("#type_message").val();
+    $("#type_message").val(" ");
+    console.log(text);
+    $.post("http://localhost:3301/messages", { text: text });
+  }
+
+  socket.on("message", insertMessage);
+
+  function getMessages() {
+    $.get("http://localhost:3301/messages", data => {
+      console.log("data in get called on client side :" + data);
+      data.forEach(element => {
+        insertMessage(element);
+      });
+    });
+  }
+
+  function insertMessage(message) {
+    if ($("#chatRoomTitleHidden").val() == message.chatRoomTitle) {
+      $("#all_messages").append(
+        generateMessage(message.senderUserName, message.text)
+      );
+    }
+  }
+</script>
